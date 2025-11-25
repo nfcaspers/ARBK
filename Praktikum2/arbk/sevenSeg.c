@@ -69,7 +69,14 @@ void sevenSeg_set(uint8_t segment);
  */
 ISR(TIMER0_OVF_vect)
 {
-
+	PORTB ^= (1 << PORTB4);
+	int number;
+	if (PINB & (1 << PORTB4)) {
+		number = sevenSegValue % 10;
+	} else {
+		number = sevenSegValue / 10;
+	}
+	sevenSeg_set(digits[number]);
 }
 
 /*!
@@ -98,6 +105,8 @@ void sevenSeg_init()
 	}
 	
 	// Init Timer 0
+	TCCR0B |= (1 << CS02); //prescaler auf 256
+	TIMSK0 |= (1 << TOIE0); //overflow interupts für timer0 aktivieren
 	
 	// Enable global interrupts
 	sei();

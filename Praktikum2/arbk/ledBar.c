@@ -23,7 +23,7 @@ void ledBar_init()
 void ledBar_set(uint16_t leds)
 {
 	PORTD = leds & 0xFF;
-	PORTB &= ~0x03;
+	PORTB &= ~(0x03 << 0);
 	if(gbi(leds, 8) == 1) {
 		sbi(PORTB, 0);
 	} 
