@@ -24,7 +24,7 @@ void task4()
 	{
 		uint16_t adc_value = adc_getValue();
 		float val = (adc_value / 1023.0) * 5.0;
-		int num_leds = round((adc_value/1023.0) * 10);
+		int num_leds = (adc_value * 10 + 511) / 1023; //511 = 1023/2 -> Ganzzahlendivision rundet ab, verschiebung um hälfte ermöglicht aufrunden (wenn Zahl größer als die Hälfte war)
 		//uint8_t num_leds = (uint8_t)round((adc_value / 1023) * 10);
 		uint16_t leds_bin = 0;
 		for (uint8_t i = 0; i < num_leds; i++) {
