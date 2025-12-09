@@ -8,6 +8,7 @@
 #include "util.h"
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include <math.h>
 
 //! Port definitions
 //! 7-Segment switch
@@ -70,13 +71,19 @@ void sevenSeg_set(uint8_t segment);
 ISR(TIMER0_OVF_vect)
 {
 	PORTB ^= (1 << PORTB4);
-	int number;
+	int number; 
+	uint8_t output;
 	if (PINB & (1 << PORTB4)) {
-		number = sevenSegValue % 10;
+		number = sevenSegValue % 10; //Einerstelle
+		output = digits[number];
 	} else {
-		number = sevenSegValue / 10;
+		number = sevenSegValue / 10; //Zehnerstelle
+		output = digits[number];
+		if(sevenSegDot) {
+			output = cbi(output, 7);
+		} 
 	}
-	sevenSeg_set(digits[number]);
+	sevenSeg_set(output);
 }
 
 /*!
@@ -128,5 +135,21 @@ void sevenSeg_displayDecimal(uint8_t value)
  */
 void sevenSeg_displayFloat(float value)
 {
-	
+	//val - int_val >0.5 auf ansonsten ab?
+	if(value >= 10) {
+		sevenSegValue = value;
+		sevenSegDot = false;
+	} else {
+		sevenSegDot = true;
+		int result;
+		float zu_runden = value * 100;
+		int ganzzahl = (int)zu_runden;
+		float rest = zu_runden - ganzzahl;
+		if(rest >= 0.5) {
+			result = (ganzzahl + 1)/100;	
+		} else {
+			result = ganzzahl;
+		}
+		sevenSegValue = result;
+	}
 }
