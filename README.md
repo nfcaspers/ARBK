@@ -1,1 +1,1 @@
-Praktikum zum Modul: Architektur von Rechnersystemen und Betriebssystemkonzepte und verteilte Systeme
+Praktikum zum Modul: Architektur von Rechnersystemen und Betriebssystemkonzepte und verteilte Systeme (ARBKVS) FH Aachen
